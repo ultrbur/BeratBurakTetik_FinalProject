@@ -1,0 +1,11 @@
+﻿@model IEnumerable<stajbul.Models.stajbulUser>
+@using Microsoft.AspNetCore.Http;
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@{
+    ViewData["Title"] = "Profile";
+}
+<h1>Profilim</h1>
+<h4>@HttpContextAccessor.HttpContext.Session.GetString("name").ToString()</h4>
+
+@await Html.PartialAsync("profilePartial", new stajbulUser())
+

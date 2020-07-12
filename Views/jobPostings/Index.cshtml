@@ -1,0 +1,48 @@
+﻿@model IEnumerable<stajbul.Models.jobPosting>
+@using Microsoft.AspNetCore.Http;
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Staj İlanları</h1>
+
+<p>
+    @if (HttpContextAccessor.HttpContext.Session.GetString("admin") == "True")
+    {
+        <a asp-action="Create">Create New</a>
+    }
+    </p>
+<form asp-action="Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            İlan arama: <input type="text" name="SearchString" value="@ViewData["currentFilter"]" />
+            <input type="submit" value="Ara" class="btn btn-default" /> |
+            <a asp-action="Index">Tüm ilanları görüntüle</a>
+        </p>
+    </div>
+</form>
+<div class="card-columns">
+
+    @foreach (var item in Model)
+    {
+        <div class="card border-dark mb-3" style="max-width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">@Html.DisplayFor(modelItem => item.title)</h5>
+                <h6 class="card-subtitle mb-2 text-muted">@Html.DisplayFor(modelItem => item.sector)</h6>
+                <p class="card-text">@Html.DisplayFor(modelItem => item.description)</p>
+                <a asp-action="Details" asp-route-id="@item.id" class="card-link">Detay</a>
+                @if (HttpContextAccessor.HttpContext.Session.GetString("admin") == "True")
+                {
+                    <a asp-action="Edit" asp-route-id="@item.id" class="card-link">Düzenle</a>
+                    <a asp-action="Delete" asp-route-id="@item.id" class="card-link" style="color:red">Sil</a>
+                }
+                @if (HttpContextAccessor.HttpContext.Session.GetString("admin") == "False")
+                {
+                    <a asp-controller="jobApplications" asp-action="ApplyJob" asp-route-id="@item.id" class="card-link" style="color:green">Başvur</a>
+                }
+            </div>
+        </div>
+    }
+
+</div>
